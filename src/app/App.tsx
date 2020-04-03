@@ -11,7 +11,7 @@ function App() {
         <Team />
       </Route>
       <Route path="/">
-        <Redirect to="/t/" />
+        <Team />
       </Route>
     </Switch>
   )
