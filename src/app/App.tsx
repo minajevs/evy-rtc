@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import Lobby from './lobby'
 import Team from './team'
 
@@ -11,7 +11,7 @@ function App() {
         <Team />
       </Route>
       <Route path="/">
-        <Lobby />
+        <Redirect to="/t/" />
       </Route>
     </Switch>
   )
