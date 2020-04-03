@@ -1,0 +1,23 @@
+{
+  "files": {
+    "static/js/0.7679f094.chunk.js": "/evy/static/js/0.7679f094.chunk.js",
+    "static/js/0.7679f094.chunk.js.map": "/evy/static/js/0.7679f094.chunk.js.map",
+    "static/js/1.563486ac.chunk.js": "/evy/static/js/1.563486ac.chunk.js",
+    "static/js/1.563486ac.chunk.js.map": "/evy/static/js/1.563486ac.chunk.js.map",
+    "main.js": "/evy/static/js/main.3cb0e3ee.chunk.js",
+    "main.js.map": "/evy/static/js/main.3cb0e3ee.chunk.js.map",
+    "runtime-main.js": "/evy/static/js/runtime-main.b395d10d.js",
+    "runtime-main.js.map": "/evy/static/js/runtime-main.b395d10d.js.map",
+    "static/js/4.4a9dbad3.chunk.js": "/evy/static/js/4.4a9dbad3.chunk.js",
+    "static/js/4.4a9dbad3.chunk.js.map": "/evy/static/js/4.4a9dbad3.chunk.js.map",
+    "index.html": "/evy/index.html",
+    "precache-manifest.d653181f6b7acb956d86926284220283.js": "/evy/precache-manifest.d653181f6b7acb956d86926284220283.js",
+    "service-worker.js": "/evy/service-worker.js",
+    "static/js/4.4a9dbad3.chunk.js.LICENSE.txt": "/evy/static/js/4.4a9dbad3.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b395d10d.js",
+    "static/js/4.4a9dbad3.chunk.js",
+    "static/js/main.3cb0e3ee.chunk.js"
+  ]
+}
