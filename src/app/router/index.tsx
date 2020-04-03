@@ -6,7 +6,8 @@ export type Props = {}
 
 export const RouterOutlet: React.FC<Props> = ({ children }) => {
     return (
-        <BrowserRouter>
+        // needs /evy because hosted on gh-pages
+        <BrowserRouter basename="/evy">
             {children}
         </BrowserRouter>
     )
