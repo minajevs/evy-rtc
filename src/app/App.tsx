@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Switch, Route, Redirect } from 'react-router-dom'
-import Lobby from './lobby'
 import Team from './team'
 
 function App() {

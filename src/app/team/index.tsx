@@ -3,9 +3,9 @@ import React, { useEffect } from 'react'
 import { useRouteMatch, useHistory } from 'react-router-dom'
 
 import { Button, TextField } from '@material-ui/core'
-import { usePeer, useCommonPeer } from '../../p2p/usePeerState'
+import { usePeer } from 'p2p/usePeerState'
 
-import { reducer, actions } from '../../basicChat/basicChatStore'
+import { reducer, actions } from 'modules/basicChat/basicChatStore'
 
 export type Props = {}
 
@@ -14,7 +14,7 @@ export const Team: React.FC<Props> = ({ }) => {
     const history = useHistory()
     const [textState, setState] = React.useState('')
 
-    const [state, dispatch, peer] = useCommonPeer(match?.params.id ?? null, { messages: [] }, reducer)
+    const [state, dispatch, peer] = usePeer(match?.params.id ?? null, { messages: [] }, reducer)
 
     const send = React.useCallback((msg: string) => {
         dispatch(actions.addMessage(msg))
