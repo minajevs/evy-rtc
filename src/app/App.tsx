@@ -2,15 +2,20 @@ import React from 'react'
 
 import { Switch, Route, Redirect } from 'react-router-dom'
 import Team from './team'
+import { PeerProvider } from './PeerProvider'
 
 function App() {
   return (
     <Switch>
       <Route path="/t/:id">
-        <Team />
+        <PeerProvider>
+          <Team />
+        </PeerProvider>
       </Route>
       <Route path="/">
-        <Team />
+        <PeerProvider>
+          <Team />
+        </PeerProvider>
       </Route>
     </Switch>
   )

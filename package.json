@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^2.2.0"
+    "gh-pages": "^2.2.0",
+    "strict-event-emitter-types": "^2.0.0"
   }
 }

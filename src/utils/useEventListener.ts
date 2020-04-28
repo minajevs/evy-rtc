@@ -1,20 +1,26 @@
-import { useRef, useEffect, useState } from 'react'
-import { EventEmitter } from 'events';
+import { useRef, useEffect, useState, DependencyList } from 'react'
+import { EventEmitter } from 'events'
+import StrictEventEmitter from 'strict-event-emitter-types/types/src'
 
 // event listener hook with mutating handler refence to optimize it for state changes
-export const useEventListener = (eventName: string, handler: (...args: any[]) => void) => {
-    const savedHandler = useRef<(...args: any[]) => void>(handler)
-    const [events] = useState(new EventEmitter())
+export const useEventListener = <E extends Record<string, (...arg: any) => any>, EK extends keyof E>(
+    eventName: EK,
+    events: StrictEventEmitter<EventEmitter, E>,
+    handler: E[EK],
+    deps: DependencyList
+) => {
+    const savedHandler = useRef<E[EK]>(handler)
 
     // Update ref.current value if handler changes
     // instead of removing and adding listener everytime
     useEffect(() => {
         savedHandler.current = handler
-    }, [handler])
+    }, deps)
 
     useEffect(
         () => {
-            const listener = (event: any) => savedHandler.current(event)
+            console.log(eventName, handler, deps)
+            const listener = (...args: any[]) => savedHandler.current(...args)
             events.on(eventName, listener)
 
             return () => {
