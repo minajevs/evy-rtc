@@ -1,21 +1,20 @@
-import React, { useEffect, useCallback } from 'react'
-
-import { useRouteMatch, useHistory } from 'react-router-dom'
+import React, { useEffect, useCallback, useContext } from 'react'
 
 import { Button, TextField } from '@material-ui/core'
-import { usePeerConnection } from 'p2p/usePeerState'
 import { useChat } from 'app/modules/chat'
+import { context, useUsers } from 'app/modules/users'
 
 export type Props = {}
 
 export const Team: React.FC<Props> = ({ }) => {
     const [textState, setState] = React.useState('')
-    const [chatState, log, sendMessage] = useChat()
+    const [chatState, sendMessage] = useChat()
+    const [usersState, userLogin] = useUsers()
 
     const login = useCallback((name: string) => {
-        log(name)
+        userLogin(name)
         setState('')
-    }, [log])
+    }, [userLogin])
 
     const send = useCallback((msg: string) => {
         sendMessage(msg)
@@ -25,7 +24,7 @@ export const Team: React.FC<Props> = ({ }) => {
     if (chatState.connecting)
         return (<>Connecting...</>)
 
-    if (chatState.currentUser === null)
+    if (usersState.currentUser === null)
         return (
             <>
                 <div>Choose username:</div>
@@ -35,6 +34,10 @@ export const Team: React.FC<Props> = ({ }) => {
         )
     return (
         <>
+            Current user: {usersState.currentUser.username}
+            <br />
+            Users in the room: {usersState.users.map((user, i) => <p key={i}>{user.username} : {user.userId}</p>)}
+            <hr />
             {chatState.messages.map((msg, key) => <p key={key}>[{msg.author.username}]{msg.text}</p>)}
             <TextField value={textState} onChange={event => setState(event.currentTarget.value)}></TextField>
             <Button onClick={() => send(textState)}>Send</Button>

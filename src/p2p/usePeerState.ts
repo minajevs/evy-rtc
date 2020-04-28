@@ -107,7 +107,7 @@ export const usePeerConnection = (
         connections.forEach(connection => source?.id !== connection.id
             ? connection.send(action) : void (0))
 
-        if (peerState.isHost)
+        if (peerState.isHost && source?.id !== peer!.id)
             selfEmit(events, peer!, action)
     }, [connections, peerState.isHost])
 

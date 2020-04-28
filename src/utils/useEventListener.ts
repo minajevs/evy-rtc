@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, DependencyList } from 'react'
+import { useRef, useEffect, DependencyList } from 'react'
 import { EventEmitter } from 'events'
 import StrictEventEmitter from 'strict-event-emitter-types/types/src'
 
