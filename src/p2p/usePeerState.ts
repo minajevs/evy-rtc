@@ -7,8 +7,12 @@ import { createPeer } from 'p2p/core'
 import { useEventListener } from 'utils/useEventListener'
 import { ActionCreator } from 'typesafe-actions/dist/is-action-of'
 
+type IdLike = {
+    id: string
+}
+
 type PeerHost = {
-    id: string | null,
+    id: string | null
     ready: boolean
 }
 
@@ -20,8 +24,7 @@ type PeerState = {
     readonly error: Error | null
 }
 
-export type InternalPeerReference = {
-    id: string
+export type InternalPeerReference = IdLike & {
     send: <T extends Action = Action>(action: T) => void
 }
 
@@ -40,7 +43,7 @@ export type PeerEvents = {
 
 export type PeerEmmiter = StrictEventEmitter<EventEmitter, PeerEvents>
 
-type PeerDispatch = (action: Action, source?: InternalPeerReference) => void
+type PeerDispatch = (action: Action, source?: IdLike) => void
 
 export const context = createContext<ReturnType<typeof usePeerConnection>>(null as any) // fix dis?
 
@@ -74,7 +77,7 @@ const selfEmit = (events: PeerEmmiter, selfPeer: Peer, action: Action) => {
 
 export const usePeerConnection = (
     hostId: string | null,  // broker id to connect. If null - create a new host
-): [PeerState, PeerEmmiter, PeerDispatch, PeerDispatch] => {
+) => {
     const [events] = useState<PeerEmmiter>(new EventEmitter())
     const [peerState, setState] = useState<PeerState>({
         peer: { id: null, ready: false },
@@ -90,7 +93,7 @@ export const usePeerConnection = (
     const { connections } = peerState
 
     const peerDispatch = useCallback((action: Action) => {
-        console.log('dispatch to host', host)
+        console.log('dispatch to host', host, action.type, 'by peer', peerState)
         if (host !== null) {
             // Send action to host
             host.send(action)
@@ -99,17 +102,17 @@ export const usePeerConnection = (
 
         if (peerState.isHost)
             selfEmit(events, peer!, action)
-    }, [host, peerState.isHost])
+    }, [host, peer, peerState.isHost])
 
-    const peerBroadcast = useCallback((action: Action, source: InternalPeerReference | null = null) => {
-        console.log('dispatch to connections', connections)
+    const peerBroadcast = useCallback((action: Action, source: IdLike | null = null) => {
+        console.log('dispatch to connections', connections, action.type, 'by peer', peerState)
         // Send action to all connection except for source connection
         connections.forEach(connection => source?.id !== connection.id
             ? connection.send(action) : void (0))
 
         if (peerState.isHost && source?.id !== peer!.id)
             selfEmit(events, peer!, action)
-    }, [connections, peerState.isHost])
+    }, [connections, peer, peerState.isHost])
 
     useEffect(
         () => {
@@ -161,7 +164,8 @@ export const usePeerConnection = (
 
                 peer.on('error', error => {
                     console.log('error happened', error)
-                    if (error.type === 'unavailable-id') return createHost(peerState.peer.id!)
+                    if (error.type === 'unavailable-id' /*|| error.type === 'peer-unavailable'*/) // not changing url on new host
+                        return createHost(peerState.peer.id!)
                     setState(prev => ({ ...prev, error: new Error(error.type) }))
                 })
 
@@ -178,7 +182,7 @@ export const usePeerConnection = (
         }, []
     )
 
-    return [peerState, events, peerDispatch, peerBroadcast]
+    return [peerState, events, peerDispatch, peerBroadcast] as const
 }
 
 export const useDataListen = <
@@ -191,6 +195,7 @@ export const useDataListen = <
 ) => {
     useEventListener('any/data', events, (conn, action) => {
         if (isActionOf(actionCreator, action)) {
+            console.log('on:', action.type)
             handler(conn, action)
         }
     }, [actionCreator, ...deps])

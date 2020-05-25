@@ -3,6 +3,7 @@ import React, { useEffect, useCallback, useContext } from 'react'
 import { Button, TextField } from '@material-ui/core'
 import { useChat } from 'app/modules/chat'
 import { context, useUsers } from 'app/modules/users'
+import { useConnection } from 'app/modules/connection'
 
 export type Props = {}
 
@@ -10,6 +11,7 @@ export const Team: React.FC<Props> = ({ }) => {
     const [textState, setState] = React.useState('')
     const [chatState, sendMessage] = useChat()
     const [usersState, userLogin] = useUsers()
+    const [connecting] = useConnection()
 
     const login = useCallback((name: string) => {
         userLogin(name)
@@ -21,7 +23,7 @@ export const Team: React.FC<Props> = ({ }) => {
         setState('')
     }, [sendMessage])
 
-    if (chatState.connecting)
+    if (connecting)
         return (<>Connecting...</>)
 
     if (usersState.currentUser === null)
